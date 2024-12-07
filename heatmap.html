@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Fogos - Coimbra</title>
+    <style>
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px;
+            background-color: #444;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            display: none; /* Inicialmente oculta */
+            opacity: 0;
+            z-index: 1000; /* Garante que a notificação fique por cima de outros elementos */
+            transition: opacity 0.5s ease;
+
+            display: flex; /* Alinha conteúdo em linha */
+            align-items: center; /* Centraliza itens verticalmente */
+            gap: 10px; /* Espaçamento entre os itens */
+        }
+       
+
+        /* Cores para os diferentes níveis de risco */
+        .notification.low {
+            background-color: green;
+        }
+
+        .notification.medium {
+            background-color: yellow;
+            color: black;
+        }
+
+        .notification.high {
+            background-color: red;
+        }
+
+        /* Icones de notificação */
+        .notification i {
+            margin-right: 10px;
+        }
+        /* Botão para fechar a notificação */
+       
+
+        #close-notification {
+            position: static; /* Remove o posicionamento absoluto */
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px; /* Ajusta o tamanho para melhor visibilidade */
+            cursor: pointer;
+            margin-left: auto; /* Empurra o botão para o final */
+        }
+
+        #close-notification:hover {
+            color: lightgray;
+        }
+
+        .notification button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+    <!-- Container para a notificação -->
+    <div id="notification" class="notification">
+        <span id="notification-message">
+            <i class="fas fa-fire"></i> Risco de Incêndio Alto! Aja imediatamente!
+        </span>
+        <button id="closeNotification">X</button>
+    </div>
+    
+    
+
+    <!-- Inclua este link para usar o estilo da notificação -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    
+    <script src="script.js"></script>
+    <script>
+        // Variável para rastrear a primeira tentativa de login
+        let isFirstAttempt = true;
+
+        // Elementos DOM
+        const loginBtn = document.getElementById('loginBtn');
+        const notification = document.getElementById('notification');
+        const closeNotification = document.getElementById('closeNotification');
+
+        // Listener para o botão de login
+        loginBtn.addEventListener('click', function(event) {
+            event.preventDefault(); // Previne o redirecionamento imediato
+            if (isFirstAttempt) {
+                // Exibir notificação de erro na primeira tentativa
+                notification.style.display = 'block';
+                isFirstAttempt = false; // Impede que a notificação apareça novamente
+                setTimeout(() => {
+                    notification.style.display = 'none'; // Oculta a notificação após 5 segundos
+                }, 5000);
+            } else {
+                // Redirecionar para a próxima página após a tentativa inicial
+                window.location.href = './heatmap.html';
+            }
+        });
+
+        // Fechar a notificação manualmente
+        closeNotification.addEventListener('click', function() {
+            notification.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
